@@ -15,7 +15,13 @@ function App() {
   const add = () => calculate(`${num1} + ${num2}`, num1 + num2)
   const subtract = () => calculate(`${num1} - ${num2}`, num1 - num2)
   const multiply = () => calculate(`${num1} * ${num2}`, num1 * num2)
-  const divide = () => calculate(`${num1} / ${num2}`, num2 !== 0 ? num1 / num2 : 'Cannot divide by zero')
+  const divide = () => {
+    if (num2 === 0) {
+      setResult('Cannot divide by zero')
+      return
+    }
+    calculate(`${num1} / ${num2}`, num1 / num2)
+  }
 
   return (
     <div className="calculator">
