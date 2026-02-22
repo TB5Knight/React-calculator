@@ -8,19 +8,24 @@ function App() {
   const [history, setHistory] = useState(() => {
     try {
       const stored = localStorage.getItem('calculatorHistory')
-      return stored ? JSON.parse(stored) : []
+      const parsed = stored ? JSON.parse(stored) : []
+      return Array.isArray(parsed) ? parsed : []
     } catch {
       return []
     }
   })
 
   useEffect(() => {
-    localStorage.setItem('calculatorHistory', JSON.stringify(history))
+    try {
+      localStorage.setItem('calculatorHistory', JSON.stringify(history))
+    } catch {
+      // storage full or unavailable; history lives in memory only
+    }
   }, [history])
 
   const calculate = (n1, n2, operator, expression, value) => {
     setResult(value)
-    setHistory(prev => [...prev, { id: Date.now(), n1, n2, operator, expression, result: value }].slice(-10))
+    setHistory(prev => [...prev, { id: crypto.randomUUID(), n1, n2, operator, expression, result: value }].slice(-10))
   }
 
   const add = () => calculate(num1, num2, '+', `${num1} + ${num2}`, num1 + num2)
