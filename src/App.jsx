@@ -9,7 +9,7 @@ function App() {
 
   const calculate = (expression, value) => {
     setResult(value)
-    setHistory(prev => [...prev, { expression, result: value }])
+    setHistory(prev => [...prev, { id: Date.now(), expression, result: value }])
   }
 
   const add = () => calculate(`${num1} + ${num2}`, num1 + num2)
@@ -54,7 +54,7 @@ function App() {
       {history.length > 0 && (
         <ul>
           {history.map((entry, i) => (
-            <li key={i}>{entry.expression} = {entry.result}</li>
+            <li key={entry.id}>{entry.expression} = {entry.result}</li>
           ))}
         </ul>
       )}
