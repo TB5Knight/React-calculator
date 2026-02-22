@@ -9,7 +9,7 @@ function App() {
 
   const calculate = (expression, value) => {
     setResult(value)
-    setHistory(prev => [...prev, { id: Date.now(), expression, result: value }])
+    setHistory(prev => [...prev, { id: Date.now(), expression, result: value }].slice(-10))
   }
 
   const add = () => calculate(`${num1} + ${num2}`, num1 + num2)
