@@ -51,6 +51,13 @@ function App() {
           <h2>Result: {result}</h2>
         </div>
       )}
+      {history.length > 0 && (
+        <ul>
+          {history.map((entry, i) => (
+            <li key={i}>{entry.expression} = {entry.result}</li>
+          ))}
+        </ul>
+      )}
     </div>
   )
 }
