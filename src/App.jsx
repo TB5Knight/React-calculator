@@ -36,13 +36,13 @@ function App() {
         <input
           type="number"
           value={num1}
-          onChange={(e) => setNum1(parseFloat(e.target.value) || 0)}
+          onChange={(e) => { const v = parseFloat(e.target.value); setNum1(isNaN(v) ? 0 : v) }}
           placeholder="First number"
         />
         <input
           type="number"
           value={num2}
-          onChange={(e) => setNum2(parseFloat(e.target.value) || 0)}
+          onChange={(e) => { const v = parseFloat(e.target.value); setNum2(isNaN(v) ? 0 : v) }}
           placeholder="Second number"
         />
       </div>
@@ -61,7 +61,7 @@ function App() {
         <div className="history">
           <ul>
             {history.map((entry) => (
-              <li key={entry.id} onClick={() => loadEntry(entry)} style={{ cursor: 'pointer' }}>{entry.expression} = {entry.result}</li>
+              <li key={entry.id} onClick={() => loadEntry(entry)}>{entry.expression} = {entry.result}</li>
             ))}
           </ul>
           <div className="history-footer">

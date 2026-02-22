@@ -76,6 +76,7 @@
   font-family: monospace;
   font-size: 14px;
   color: #333;
+  cursor: pointer;
 }
 
 .history li:nth-child(even) {
