@@ -1,15 +1,49 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
   const [num1, setNum1] = useState(0)
   const [num2, setNum2] = useState(0)
   const [result, setResult] = useState(null)
+  const [history, setHistory] = useState(() => {
+    try {
+      const stored = localStorage.getItem('calculatorHistory')
+      const parsed = stored ? JSON.parse(stored) : []
+      return Array.isArray(parsed) ? parsed : []
+    } catch {
+      return []
+    }
+  })
 
-  const add = () => setResult(num1 + num2)
-  const subtract = () => setResult(num1 - num2)
-  const multiply = () => setResult(num1 * num2)
-  const divide = () => setResult(num2 !== 0 ? num1 / num2 : 'Cannot divide by zero')
+  useEffect(() => {
+    try {
+      localStorage.setItem('calculatorHistory', JSON.stringify(history))
+    } catch {
+      // storage full or unavailable; history lives in memory only
+    }
+  }, [history])
+
+  const calculate = (n1, n2, operator, expression, value) => {
+    setResult(value)
+    setHistory(prev => [...prev, { id: crypto.randomUUID(), n1, n2, operator, expression, result: value }].slice(-10))
+  }
+
+  const add = () => calculate(num1, num2, '+', `${num1} + ${num2}`, num1 + num2)
+  const subtract = () => calculate(num1, num2, '-', `${num1} - ${num2}`, num1 - num2)
+  const multiply = () => calculate(num1, num2, '*', `${num1} * ${num2}`, num1 * num2)
+  const divide = () => {
+    if (num2 === 0) {
+      setResult('Cannot divide by zero')
+      return
+    }
+    calculate(num1, num2, '/', `${num1} / ${num2}`, num1 / num2)
+  }
+
+  const loadEntry = (entry) => {
+    setNum1(entry.n1)
+    setNum2(entry.n2)
+    setResult(entry.result)
+  }
 
   return (
     <div className="calculator">
@@ -18,13 +52,13 @@ function App() {
         <input
           type="number"
           value={num1}
-          onChange={(e) => setNum1(parseFloat(e.target.value) || 0)}
+          onChange={(e) => { const v = parseFloat(e.target.value); setNum1(isNaN(v) ? 0 : v) }}
           placeholder="First number"
         />
         <input
           type="number"
           value={num2}
-          onChange={(e) => setNum2(parseFloat(e.target.value) || 0)}
+          onChange={(e) => { const v = parseFloat(e.target.value); setNum2(isNaN(v) ? 0 : v) }}
           placeholder="Second number"
         />
       </div>
@@ -37,6 +71,18 @@ function App() {
       {result !== null && (
         <div className="result">
           <h2>Result: {result}</h2>
+        </div>
+      )}
+      {history.length > 0 && (
+        <div className="history">
+          <ul>
+            {history.map((entry) => (
+              <li key={entry.id} onClick={() => loadEntry(entry)}>{entry.expression} = {entry.result}</li>
+            ))}
+          </ul>
+          <div className="history-footer">
+            <button onClick={() => setHistory([])}>Clear History</button>
+          </div>
         </div>
       )}
     </div>
