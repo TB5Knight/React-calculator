@@ -53,10 +53,13 @@ function App() {
       )}
       {history.length > 0 && (
         <ul>
-          {history.map((entry, i) => (
+          {history.map((entry) => (
             <li key={entry.id}>{entry.expression} = {entry.result}</li>
           ))}
         </ul>
+      )}
+      {history.length > 0 && (
+        <button onClick={() => setHistory([])}>Clear History</button>
       )}
     </div>
   )
