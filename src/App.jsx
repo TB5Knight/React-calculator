@@ -52,14 +52,16 @@ function App() {
         </div>
       )}
       {history.length > 0 && (
-        <>
+        <div className="history">
           <ul>
             {history.map((entry) => (
               <li key={entry.id}>{entry.expression} = {entry.result}</li>
             ))}
           </ul>
-          <button onClick={() => setHistory([])}>Clear History</button>
-        </>
+          <div className="history-footer">
+            <button onClick={() => setHistory([])}>Clear History</button>
+          </div>
+        </div>
       )}
     </div>
   )
