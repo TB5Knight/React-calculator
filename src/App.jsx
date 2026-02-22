@@ -1,11 +1,22 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
   const [num1, setNum1] = useState(0)
   const [num2, setNum2] = useState(0)
   const [result, setResult] = useState(null)
-  const [history, setHistory] = useState([])
+  const [history, setHistory] = useState(() => {
+    try {
+      const stored = localStorage.getItem('calculatorHistory')
+      return stored ? JSON.parse(stored) : []
+    } catch {
+      return []
+    }
+  })
+
+  useEffect(() => {
+    localStorage.setItem('calculatorHistory', JSON.stringify(history))
+  }, [history])
 
   const calculate = (n1, n2, operator, expression, value) => {
     setResult(value)
