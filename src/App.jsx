@@ -5,11 +5,17 @@ function App() {
   const [num1, setNum1] = useState(0)
   const [num2, setNum2] = useState(0)
   const [result, setResult] = useState(null)
+  const [history, setHistory] = useState([])
 
-  const add = () => setResult(num1 + num2)
-  const subtract = () => setResult(num1 - num2)
-  const multiply = () => setResult(num1 * num2)
-  const divide = () => setResult(num2 !== 0 ? num1 / num2 : 'Cannot divide by zero')
+  const calculate = (expression, value) => {
+    setResult(value)
+    setHistory(prev => [...prev, { expression, result: value }])
+  }
+
+  const add = () => calculate(`${num1} + ${num2}`, num1 + num2)
+  const subtract = () => calculate(`${num1} - ${num2}`, num1 - num2)
+  const multiply = () => calculate(`${num1} * ${num2}`, num1 * num2)
+  const divide = () => calculate(`${num1} / ${num2}`, num2 !== 0 ? num1 / num2 : 'Cannot divide by zero')
 
   return (
     <div className="calculator">
